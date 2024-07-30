@@ -1,0 +1,37 @@
+queue-service:
+  redis:
+    addr: "$REDIS_ADDR"
+    password: "$REDIS_PASSWORD"
+
+
+queue:
+  analytics:
+    service: "redis"
+    enabled: true
+    
+  public-portal:
+    service: "redis"
+    enabled: true
+
+consumer:
+  analytics:
+    group: "analytics-GROUP"
+    stream: "analytics"
+    consumers:
+      consumer-1:
+        count: 10
+        block: 100
+        no_ack: true
+    
+  public-portal:
+    group: "public-portal-group"
+    stream: "public-portal"
+    consumers:
+      consumer-1:
+        count: 10
+        block: 100
+        no_ack: true
+      consumer-2:
+        count: 10
+        block: 100
+        no_ack: true
