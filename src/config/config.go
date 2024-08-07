@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"strings"
 
@@ -15,8 +16,8 @@ func Setup(path string) {
 	}
 
 	viper.AddConfigPath(path)
-	viper.SetConfigType("yaml")
 	viper.SetConfigName(fileName)
+	viper.SetConfigType("yaml")
 
 	// Read the config file
 	if err := viper.ReadInConfig(); err != nil {
@@ -30,8 +31,8 @@ func Setup(path string) {
 		replaceEnvKeys(key)
 	}
 
-	fmt.Println("Using config file:", viper.ConfigFileUsed())
-	fmt.Println("Config loaded successfully")
+	slog.Info("Using config from", "file", viper.ConfigFileUsed())
+	slog.Info("Config loaded successfully")
 }
 
 func replaceEnvKeys(key string) {

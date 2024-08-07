@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"log/slog"
 	"net/http"
 
 	"github.com/ethereum/go-ethereum/log"
@@ -21,22 +22,47 @@ type Attachment struct {
 	Fallback string `json:"fallback"`
 }
 
-var webhookURL string
+func Error(title, text string) {
+	attachment := &Attachment{
+		Color:    "danger",
+		Title:    title,
+		Text:     text,
+		Fallback: title,
+	}
 
-func init() {
-	webhookURL = viper.GetString("slack.webhook_url")
+	Report(attachment)
 }
 
-func Report(title string, text string) {
-	attachment := Attachment{
+func Info(title, text string) {
+	attachment := &Attachment{
 		Color:    "good",
 		Title:    title,
 		Text:     text,
-		Fallback: text,
+		Fallback: title,
+	}
+
+	Report(attachment)
+}
+
+func Warning(title, text string) {
+	attachment := &Attachment{
+		Color:    "warning",
+		Title:    title,
+		Text:     text,
+		Fallback: title,
+	}
+
+	Report(attachment)
+}
+
+func Report(attachment *Attachment) {
+	webhookURL := viper.GetString("slack.webhook_url")
+	if webhookURL == "" {
+		slog.Error("slack webhook URL not found")
 	}
 
 	message := SlackMessage{
-		Attachments: []Attachment{attachment},
+		Attachments: []Attachment{*attachment},
 	}
 
 	jsonBytes, err := json.Marshal(message)
