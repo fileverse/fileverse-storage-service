@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"storage/src/config"
 	"storage/src/pkg/db"
 	"storage/src/services/server"
 
@@ -11,9 +12,8 @@ import (
 func init() {
 	fmt.Println("Initializing server")
 	godotenv.Load()
-
+	config.Setup("./src/config")
 	db.Setup()
-
 	fmt.Println("Server initialized")
 }
 
