@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"storage/src/services/server/middleware"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -25,7 +26,7 @@ func Build() *gin.Engine {
 
 	// Endpoints
 	v1 := router.Group("api/v1")
-	v1.Use(apiKeyAuthMiddleware())
+	v1.Use(middleware.ApiKeyAuth())
 	groupV1Endpoints(v1)
 
 	return router

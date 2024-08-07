@@ -1,4 +1,4 @@
-package server
+package middleware
 
 import (
 	"net/http"
@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func apiKeyAuthMiddleware() gin.HandlerFunc {
+func ApiKeyAuth() gin.HandlerFunc {
 	validAPIKey := os.Getenv("VALID_API_KEY")
 	return func(c *gin.Context) {
 		apiKey := c.GetHeader("x-api-key")
