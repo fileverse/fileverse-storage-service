@@ -11,3 +11,7 @@ rpc_url:
 
 mongo:
   uri: $MONGO_URI
+
+logger:
+  format: json
+  level: debug

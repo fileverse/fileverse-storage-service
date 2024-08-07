@@ -2,8 +2,7 @@ package db
 
 import (
 	"context"
-	"fmt"
-	"log/slog"
+	"storage/src/pkg/logger"
 
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,8 +13,9 @@ import (
 var mongoClient *mongo.Client
 
 func Setup() {
+	log := logger.Logger
 	mongoUri := viper.GetString("mongo.uri")
-	slog.Info("Connecting to MongoDB", "uri", mongoUri)
+	log.Debug("Connecting to MongoDB", "uri", mongoUri)
 
 	ctx := context.Background()
 	mdb, err := mongo.Connect(
@@ -31,7 +31,7 @@ func Setup() {
 	if err = mongoClient.Ping(ctx, readpref.Primary()); err != nil {
 		panic(err)
 	} else {
-		fmt.Println("Connected to MongoDB!")
+		log.Info("Connected to MongoDB")
 	}
 
 }
