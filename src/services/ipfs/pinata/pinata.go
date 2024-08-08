@@ -15,8 +15,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var apiKey string
-var apiSecret string
 var apiJwt string
 var host string
 var unpinPath string
@@ -26,8 +24,6 @@ var once sync.Once
 
 func setup() {
 	once.Do(func() {
-		apiKey = viper.GetString("pinata.api_key")
-		apiSecret = viper.GetString("pinata.secret")
 		apiJwt = viper.GetString("pinata.jwt")
 		host = viper.GetString("pinata.host")
 		unpinPath = viper.GetString("pinata.unpin_path")

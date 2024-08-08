@@ -13,9 +13,9 @@ import (
 
 func CanUpload(ctx context.Context, size int64) (bool, error) {
 	log := logger.GetContextLogger(ctx)
-	// if ctx.Value("isAuthenticated") == false {
-	// 	return false, fmt.Errorf("unauthorized to upload file")
-	// }
+	if ctx.Value("isAuthenticated") == false {
+		return false, fmt.Errorf("unauthorized to upload file")
+	}
 
 	contract := ctx.Value("contract").(string)
 	limit := dbservice.GetLimit(ctx, contract)

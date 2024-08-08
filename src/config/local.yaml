@@ -18,8 +18,6 @@ logger:
   level: debug
 
 pinata:
-  api_key: $PINATA_API_KEY
-  secret: $PINATA_SECRET
   jwt: $PINATA_JWT
   host: https://api.pinata.cloud
   unpin_path: pinning/unpinp
