@@ -2,13 +2,13 @@ package middleware
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 func ApiKeyAuth() gin.HandlerFunc {
-	validAPIKey := os.Getenv("VALID_API_KEY")
+	validAPIKey := viper.GetString("x_api_key")
 	return func(c *gin.Context) {
 		apiKey := c.GetHeader("x-api-key")
 

@@ -4,6 +4,7 @@ import (
 	"storage/src/pkg/logger"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func RequestRequirements() gin.HandlerFunc {
@@ -15,10 +16,23 @@ func RequestRequirements() gin.HandlerFunc {
 }
 
 func beforeRequest(c *gin.Context) {
+	contractAddress := c.GetHeader("Contract")
+	invokerAddress := c.GetHeader("Invoker")
+	chainID := c.GetHeader("Chain")
+	namespace := c.GetHeader("Namespace")
+
+	requestID := uuid.New().String()
+	c.Set("requestId", requestID)
+	c.Set("isAuthenticated", false)
+	c.Set("invoker", invokerAddress)
+	c.Set("contract", contractAddress)
+	c.Set("chainId", chainID)
+	c.Set("namespace", namespace)
+
+	// set logger
 	requestUrl := c.Request.URL.Path
 	requestMethod := c.Request.Method
-
-	logger := logger.Logger.WithGroup("request").With("url", requestUrl, "method", requestMethod)
+	logger := logger.Logger.With("url", requestUrl, "method", requestMethod)
 	c.Set("logger", logger)
 }
 

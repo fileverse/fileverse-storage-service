@@ -14,17 +14,17 @@ func Build() *gin.Engine {
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
 	router.Use(middleware.CorsHandler())
+	router.Use(middleware.RequestRequirements())
 
-	router.GET("health", func(c *gin.Context) {
+	// Endpoints
+	v1 := router.Group("/storage-service/api/v1")
+	v1configs(v1)
+
+	router.GET("/storage-service/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "OK",
 		})
 	})
 
-	// Endpoints
-	v1 := router.Group("api/v1")
-	v1configs(v1)
-
 	return router
-
 }

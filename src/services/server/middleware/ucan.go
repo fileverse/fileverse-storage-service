@@ -2,15 +2,14 @@ package middleware
 
 import (
 	"context"
-	"log"
 	goucan "storage/src/pkg/goucan"
+	"storage/src/pkg/logger"
 	"storage/src/services/portal"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 )
 
@@ -22,21 +21,13 @@ func init() {
 }
 
 // Verify is a Gin middleware for authentication and authorization
-func Verify() gin.HandlerFunc {
+func UcanVerify() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		contractAddress := c.GetHeader("Contract")
-		invokerAddress := c.GetHeader("Invoker")
-		chainID := c.GetHeader("Chain")
-		namespace := c.GetHeader("Namespace")
-
-		requestID := uuid.New().String()
-		c.Set("requestId", requestID)
-		c.Set("isAuthenticated", false)
-		c.Set("invokerAddress", invokerAddress)
-		c.Set("contractAddress", contractAddress)
-		c.Set("chainId", chainID)
-		c.Set("namespace", namespace)
-		log.Printf("req.requestId: %s", requestID)
+		log := logger.GetContextLogger(c)
+		contractAddress := c.GetString("contract")
+		invokerAddress := c.GetString("invoker")
+		chainID := c.GetString("chain")
+		namespace := c.GetString("namespace")
 
 		token := c.GetHeader("Authorization")
 		if token == "" || invokerAddress == "" {
@@ -59,7 +50,7 @@ func Verify() gin.HandlerFunc {
 		}
 
 		if err != nil {
-			log.Printf("Error in verification: %v", err)
+			log.Error("Error in verification", "error", err)
 		}
 
 		c.Set("isAuthenticated", isAuthenticated)

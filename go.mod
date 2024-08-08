@@ -7,7 +7,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.4.0
 	github.com/mr-tron/base58 v1.2.0
-	github.com/wabarc/ipfs-pinner v1.1.0
 )
 
 require (
@@ -48,6 +47,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
+	github.com/rogpeppe/go-internal v1.10.0 // indirect
 	github.com/sagikazarmark/locafero v0.4.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
@@ -78,18 +78,13 @@ require (
 )
 
 require (
-	github.com/fortytw2/leaktest v1.3.0 // indirect
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/joho/godotenv v1.5.1
-	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/spf13/viper v1.19.0
-	github.com/wabarc/helper v0.0.0-20230418130954-be7440352bcb // indirect
-	github.com/ybbus/httpretry v1.0.2 // indirect
 	go.mongodb.org/mongo-driver v1.16.0
-	golang.org/x/net v0.27.0 // indirect
+	golang.org/x/net v0.27.0
 	golang.org/x/sys v0.22.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
-	mvdan.cc/xurls/v2 v2.5.0 // indirect
 )

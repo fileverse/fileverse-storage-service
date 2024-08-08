@@ -19,14 +19,10 @@ func (c *Collection) init() {
 	c.collection = mongoClient.Database(c.Db).Collection(c.Collection)
 }
 
-func (c *Collection) FindOne(ctx context.Context, query interface{}) (interface{}, error) {
-	var resp interface{}
-	err := c.collection.FindOne(ctx, query).Decode(&resp)
-	if err != nil && err != mongo.ErrNoDocuments {
-		return nil, err
-	}
+func (c *Collection) FindOne(ctx context.Context, query interface{}, resp interface{}) error {
 
-	return resp, nil
+	err := c.collection.FindOne(ctx, query).Decode(resp)
+	return err
 }
 
 func (c *Collection) FindOneAndUpdate(ctx context.Context, filter interface{}, update interface{}, upsert bool) (interface{}, error) {
@@ -53,7 +49,7 @@ func (c *Collection) InsertOne(ctx context.Context, document interface{}) (*mong
 }
 
 func GetCollection(collection constants.CollectionName) *Collection {
-	db := viper.GetString("Db_Name")
+	db := viper.GetString("mongo.db")
 	c := &Collection{
 		Db:         db,
 		Collection: string(collection),

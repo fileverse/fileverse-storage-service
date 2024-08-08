@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/viper"
+	"golang.org/x/net/context"
 )
 
 var Logger *slog.Logger
@@ -44,4 +45,12 @@ func Setup() {
 	default:
 		Logger = slog.New(slog.NewTextHandler(os.Stdout, slogHandlerOpt))
 	}
+}
+
+func GetContextLogger(ctx context.Context) *slog.Logger {
+	logger := ctx.Value("logger")
+	if logger == nil {
+		return Logger
+	}
+	return logger.(*slog.Logger)
 }
