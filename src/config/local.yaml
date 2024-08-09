@@ -2,12 +2,12 @@ slack:
   webhook_url: $SLACK_WEBHOOK_URL
 
 rpc_url:
-  eth_goerli: ""
-  eth_mainnet: ""
-  eth_sepolia: ""
-  gnosis_mainnet: ""
-  gnosis_testnet: ""
-  polygon_mainnet: ""
+  eth_goerli: $ETH_GOERLI_RPC_URL
+  eth_mainnet: $ETH_MAINNET_RPC_URL
+  eth_sepolia: $ETH_SEPOLIA_RPC_URL
+  gnosis_mainnet: $GNOSIS_MAINNET_RPC_URL
+  gnosis_testnet: $GNOSIS_TESTNET_RPC_URL
+  polygon_mainnet: $POLYGON_MAINNET_RPC_URL
 
 mongo:
   uri: $MONGO_URI
@@ -26,3 +26,5 @@ pinata:
 x_api_key: "hello_world"
 fileverse_gateway: "https://ipfs.fileverse.io/ipfs/"
 port: 8001
+service:
+  did: $SERVICE_DID

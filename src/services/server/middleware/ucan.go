@@ -13,13 +13,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Config represents the configuration for the service
-var serviceDID string
-
-func init() {
-	serviceDID = viper.GetString("service.did")
-}
-
 // Verify is a Gin middleware for authentication and authorization
 func UcanVerify() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -60,13 +53,16 @@ func UcanVerify() gin.HandlerFunc {
 
 // validateUcanPayload validates a UCAN payload
 func validateUcanPayload(c context.Context, payload *goucan.UcanPayload, token string) (bool, error) {
-	ucan, err := goucan.DecodeUcanString(token)
+	log := logger.GetContextLogger(c)
+	ucan, err := goucan.DecodeUcanString(c, token)
 	if err != nil {
+		log.Debug("Error decoding UCAN", "error", err)
 		return false, err
 	}
 
-	result, err := ucan.Verify(payload)
+	result, err := ucan.Verify(c, payload)
 	if err != nil {
+		log.Debug("Error verifying UCAN", "error", err)
 		return false, err
 	}
 
@@ -75,6 +71,7 @@ func validateUcanPayload(c context.Context, payload *goucan.UcanPayload, token s
 
 // validateNamespace validates a namespace
 func validateNamespace(c context.Context, namespace, invokerAddress, token string) (bool, error) {
+	serviceDID := viper.GetString("service.did")
 	payload := &goucan.UcanPayload{
 		Iss: invokerAddress,
 		Aud: serviceDID,
@@ -97,7 +94,7 @@ func validateNamespace(c context.Context, namespace, invokerAddress, token strin
 
 // validateContractAddress validates a contract address
 func validateContractAddress(c context.Context, contractAddress, invokerAddress, token, chainID string) (bool, error) {
-	portal, err := portal.NewPortalContract(contractAddress, "", chainID)
+	portal, err := portal.NewPortalContract(c, contractAddress, "", chainID)
 	if err != nil {
 		return false, err
 	}
@@ -108,6 +105,7 @@ func validateContractAddress(c context.Context, contractAddress, invokerAddress,
 	}
 
 	invokerDid := keys.EditDid
+	serviceDID := viper.GetString("service.did")
 
 	payload := &goucan.UcanPayload{
 		Iss: invokerDid,
@@ -131,6 +129,7 @@ func validateContractAddress(c context.Context, contractAddress, invokerAddress,
 
 // validateInvokerAddress validates an invoker address
 func validateInvokerAddress(c context.Context, invokerAddress, token string) (bool, error) {
+	serviceDID := viper.GetString("service.did")
 	payload := &goucan.UcanPayload{
 		Iss: invokerAddress,
 		Aud: serviceDID,

@@ -1,9 +1,11 @@
 package goucan
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"storage/src/pkg/logger"
 	"strings"
 )
 
@@ -17,7 +19,8 @@ var (
 	ErrUcanNotActive         = fmt.Errorf("not active yet")
 )
 
-func DecodeUcanString(ucStr string) (*Ucan, error) {
+func DecodeUcanString(ctx context.Context, ucStr string) (*Ucan, error) {
+	log := logger.GetContextLogger(ctx)
 	parts := strings.Split(ucStr, ".")
 	if len(parts) != 3 {
 		return nil, ErrUcanForamt
@@ -34,8 +37,8 @@ func DecodeUcanString(ucStr string) (*Ucan, error) {
 		}
 	}
 
-	fmt.Println(string(partsBytes[0]))
-	fmt.Println(string(partsBytes[1]))
+	log.Debug("ucan Header", "header", string(partsBytes[0]))
+	log.Debug("ucan Payload", "payload", string(partsBytes[1]))
 
 	header, err := DecodeUcanHeaderBytes(partsBytes[0])
 	if err != nil {

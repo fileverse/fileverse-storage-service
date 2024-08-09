@@ -1,10 +1,12 @@
 package goucan
 
 import (
+	"context"
 	"crypto/ed25519"
 	"encoding/base64"
 	"fmt"
 	"reflect"
+	"storage/src/pkg/logger"
 	"strings"
 
 	"github.com/golang-jwt/jwt"
@@ -54,7 +56,7 @@ func (uc *Ucan) extractPublicKeyBytesFromDID(did string) ([]byte, error) {
 	return publicKeyBytes, nil
 }
 
-func (uc *Ucan) checkEdDsaSignature() error {
+func (uc *Ucan) checkEdDsaSignature(c context.Context) error {
 	publicKey, err := uc.extractPublicKeyBytesFromDID(uc.Payload.Iss)
 	if err != nil {
 		return fmt.Errorf("error extracting public key bytes from DID: %w", err)
@@ -68,13 +70,14 @@ func (uc *Ucan) checkEdDsaSignature() error {
 	return err
 }
 
-func (uc *Ucan) isExpired() bool {
+func (uc *Ucan) isExpired(ctx context.Context) bool {
+	log := logger.GetContextLogger(ctx)
 	if uc.Payload.Exp == 0 {
 		return false
 	}
 
-	fmt.Println(uc.Payload.Exp)        // 0x14000010600
-	fmt.Println(jwt.TimeFunc().Unix()) // 1722924268
+	log.Debug("Payload.Exp", "Payload.Exp", uc.Payload.Exp)
+	log.Debug("TimeFunc", "TimeFunc", jwt.TimeFunc().Unix())
 	return uc.Payload.Exp < jwt.TimeFunc().Unix()
 }
 
@@ -90,10 +93,11 @@ func (uc *Ucan) getReadableAtt() ([]Capabilities, error) {
 	return att, nil
 }
 
-func (uc *Ucan) compareAtt(att []Capabilities) bool {
+func (uc *Ucan) compareAtt(ctx context.Context, att []Capabilities) bool {
+	log := logger.GetContextLogger(ctx)
 	ucAtt, err := uc.getReadableAtt()
 	if len(ucAtt) != len(att) || err != nil {
-		fmt.Println("Error in compareAtt", err)
+		log.Error("Error getting readable att", "error", err)
 		return false
 	}
 
@@ -111,13 +115,13 @@ func (uc *Ucan) compareAtt(att []Capabilities) bool {
 	return reflect.DeepEqual(capMap1, capMap2)
 }
 
-func (uc *Ucan) Verify(payload *UcanPayload) (bool, error) {
-	err := uc.checkEdDsaSignature()
+func (uc *Ucan) Verify(ctx context.Context, payload *UcanPayload) (bool, error) {
+	err := uc.checkEdDsaSignature(ctx)
 	if err != nil {
 		return false, ErrUcanSignatureInvalid
 	}
 
-	if uc.isExpired() {
+	if uc.isExpired(ctx) {
 		return false, ErrUcanExpired
 	}
 
@@ -129,7 +133,7 @@ func (uc *Ucan) Verify(payload *UcanPayload) (bool, error) {
 		return false, fmt.Errorf("iss mismatch")
 	}
 
-	if !uc.compareAtt(payload.Att) {
+	if !uc.compareAtt(ctx, payload.Att) {
 		return false, fmt.Errorf("att mismatch")
 	}
 

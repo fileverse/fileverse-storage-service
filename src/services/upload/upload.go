@@ -50,7 +50,7 @@ func UploadFile(ctx context.Context, file *multipart.FileHeader, tags []string) 
 		InvokerAddress:  ctx.Value("invoker").(string),
 		ContractAddress: contract,
 		GatewayURL:      fileverseGateway + pinataResp.IpfsHash,
-		ChainID:         ctx.Value("chainId").(string),
+		ChainID:         ctx.Value("chain").(string),
 		IpfsHash:        pinataResp.IpfsHash,
 		FileSize:        pinataResp.PinSize,
 		Tags:            tags,

@@ -26,7 +26,7 @@ func beforeRequest(c *gin.Context) {
 	c.Set("isAuthenticated", false)
 	c.Set("invoker", invokerAddress)
 	c.Set("contract", contractAddress)
-	c.Set("chainId", chainID)
+	c.Set("chain", chainID)
 	c.Set("namespace", namespace)
 
 	// set logger

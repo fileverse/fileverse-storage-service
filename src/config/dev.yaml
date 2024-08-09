@@ -15,7 +15,7 @@ mongo:
 
 logger:
   format: json
-  level: debug
+  level: info
 
 pinata:
   jwt: $PINATA_JWT
@@ -26,3 +26,5 @@ pinata:
 x_api_key: "hello_world"
 fileverse_gateway: "https://ipfs.fileverse.io/ipfs/"
 port: 8001
+service:
+  did: $SERVICE_DID
