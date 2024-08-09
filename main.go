@@ -8,6 +8,7 @@ import (
 	"storage/src/services/server"
 
 	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
 )
 
 func init() {
@@ -23,5 +24,6 @@ func init() {
 func main() {
 	fmt.Println("Starting server")
 	s := server.Build()
-	s.Run(":8080")
+	port := viper.GetString("port")
+	s.Run(":" + port)
 }

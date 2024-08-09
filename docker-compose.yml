@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: storage_service_image
+    container_name: storage_service_container
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
