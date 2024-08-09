@@ -16,12 +16,12 @@ type Files struct {
 	FileSize        int64     `json:"fileSize,omitempty" bson:"fileSize,omitempty"`
 	Tags            []string  `json:"tags,omitempty" bson:"tags,omitempty"`
 	Namespace       any       `json:"namespace,omitempty" bson:"namespace,omitempty"`
-	CreatedAt       time.Time `json:"created_at,omitempty" bson:"created_at,omitempty"`
+	Timestamp       time.Time `json:"timeStamp,omitempty" bson:"timeStamp,omitempty"`
 }
 
 func (f *Files) Create(ctx context.Context) error {
 	collection := db.GetCollection(constants.Files)
-	f.CreatedAt = time.Now().UTC()
+	f.Timestamp = time.Now().UTC()
 	_, err := collection.InsertOne(ctx, f)
 	return err
 }

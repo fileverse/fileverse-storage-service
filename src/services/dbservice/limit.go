@@ -14,7 +14,7 @@ type Limit struct {
 	StorageLimit    int64     `json:"storageLimit,omitempty" bson:"storageLimit,omitempty"`
 	StorageUse      int64     `json:"storageUse,omitempty" bson:"storageUse,omitempty"`
 	Unit            string    `json:"unit,omitempty" bson:"unit,omitempty"`
-	CreatedAt       time.Time `json:"created_at,omitempty" bson:"created_at,omitempty"`
+	Timestamp       time.Time `json:"timeStamp,omitempty" bson:"timeStamp,omitempty"`
 }
 
 func new(contract string) Limit {
@@ -22,7 +22,7 @@ func new(contract string) Limit {
 		ContractAddress: contract,
 		StorageLimit:    200000000,
 		Unit:            "bytes",
-		CreatedAt:       time.Now().UTC(),
+		Timestamp:       time.Now().UTC(),
 	}
 }
 
@@ -33,7 +33,7 @@ func UpdateLimit(ctx context.Context, contractAddress string, size int64) error 
 	}
 	update := map[string]interface{}{
 		"$set": map[string]interface{}{
-			"created_at": time.Now().UTC(),
+			"timeStamp": time.Now().UTC(),
 		},
 		"$inc": map[string]interface{}{
 			"storageUse": size,
