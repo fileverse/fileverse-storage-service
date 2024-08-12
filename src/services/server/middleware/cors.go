@@ -15,7 +15,5 @@ func CorsHandler() gin.HandlerFunc {
 		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 	}
-
-	config.AllowAllOrigins = true
 	return cors.New(config)
 }
