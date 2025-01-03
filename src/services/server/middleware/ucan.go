@@ -69,6 +69,28 @@ func validateUcanPayload(c context.Context, payload *goucan.UcanPayload, token s
 	return result, nil
 }
 
+func validateIdentityUcanPayload(c context.Context, contractAddress, invokerAddress, token string) (bool, error) {
+	serviceDID := viper.GetString("service.did")
+	payload := &goucan.UcanPayload{
+		Iss: invokerAddress,
+		Aud: serviceDID,
+		Att: []goucan.Capabilities{
+			{
+				With: map[string]interface{}{
+					"schema":   "storage",
+					"hierPart": strings.ToLower(contractAddress),
+				},
+				Can: map[string]interface{}{
+					"namespace": "file",
+					"segments":  []string{"CREATE"},
+				},
+			},
+		},
+	}
+
+	return validateUcanPayload(c, payload, token)
+}
+
 // validateNamespace validates a namespace
 func validateNamespace(c context.Context, namespace, invokerAddress, token string) (bool, error) {
 	serviceDID := viper.GetString("service.did")

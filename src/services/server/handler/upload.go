@@ -37,3 +37,24 @@ func UploadFile(c *gin.Context) {
 
 	c.JSON(http.StatusOK, resp)
 }
+
+func UploadIdentityFile(c *gin.Context) {
+	log := logger.GetContextLogger(c)
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		log.Error("invalid file", "error", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Upload the file to Pinata
+	resp, err := upload.UploadIdentityFile(c, file)
+	if err != nil {
+		log.Error("failed to upload file", "error", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, resp)
+}

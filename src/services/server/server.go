@@ -17,7 +17,7 @@ func Build() *gin.Engine {
 	router.Use(middleware.RequestRequirements())
 
 	// Endpoints
-	v1 := router.Group("/storage-service/api/v1")
+	v1 := router.Group("/new-storage-service/api/v1")
 	v1configs(v1)
 
 	router.GET("/storage-service/health", func(c *gin.Context) {

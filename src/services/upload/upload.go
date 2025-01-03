@@ -73,3 +73,27 @@ func UploadFile(ctx context.Context, file *multipart.FileHeader, tags []string) 
 	}
 	return
 }
+
+func UploadIdentityFile(ctx context.Context, file *multipart.FileHeader) (resp UploadFileResp, err error) {
+	log := logger.GetContextLogger(ctx)
+
+	// step 1: upload file to ipfs
+	pinataResp, err := pinata.UploadFileToIPFS(ctx, file)
+	if err != nil {
+		log.Error("failed to upload file to ipfs", "error", err)
+		return
+	}
+
+	contract := ctx.Value("contract").(string)
+	fileverseGateway := viper.GetString("fileverse_gateway")
+
+	resp = UploadFileResp{
+		IpfsUrl:         fileverseGateway + pinataResp.IpfsHash,
+		IpfsHash:        pinataResp.IpfsHash,
+		IpfsStorage:     pinataResp.IpfsStorage,
+		FileSize:        pinataResp.PinSize,
+		Mimetype:        file.Header.Get("Content-Type"),
+		ContractAddress: contract,
+	}
+	return
+}
