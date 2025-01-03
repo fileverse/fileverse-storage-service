@@ -24,7 +24,7 @@ pinata:
   pin_path: pinning/pinFileToIPFS
 
 x_api_key: "hello_world"
-fileverse_gateway: "https://ipfs.fileverse.io/ipfs/"
+fileverse_gateway: "https://dev-ipfs.fileverse.io/ipfs/"
 port: 8001
 service:
   did: $SERVICE_DID
