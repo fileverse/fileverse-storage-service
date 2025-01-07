@@ -21,6 +21,7 @@ func IdentityUcanVerify() gin.HandlerFunc {
 		token := c.GetHeader("Authorization")
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token not found"})
+			c.Abort()
 			return
 		}
 
@@ -30,6 +31,7 @@ func IdentityUcanVerify() gin.HandlerFunc {
 		if err != nil {
 			log.Error("Error validating identity UCAN", "error", err)
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Invalid UCAN", "error": err.Error()})
+			c.Abort()
 			return
 		}
 
