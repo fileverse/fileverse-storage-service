@@ -1,18 +1,19 @@
-package portal
+package fileverseportal
 
 import (
 	"context"
 	"errors"
 	"fmt"
 	"storage/src/pkg/logger"
-	"storage/src/services/portal/abi"
+	"storage/src/services/contracts"
+	fileverseportalabi "storage/src/services/contracts/FileversePortal/abi"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 type PortalContract struct {
-	Instance *abi.BindingsCaller
+	Instance *fileverseportalabi.BindingsCaller
 }
 
 func NewPortalContract(ctx context.Context, contract, network, chainId string) (*PortalContract, error) {
@@ -22,10 +23,10 @@ func NewPortalContract(ctx context.Context, contract, network, chainId string) (
 	}
 
 	if network == "" {
-		network = networkFromChainId(chainId)
+		network = contracts.NetworkFromChainId(chainId)
 	}
-	
-	networkProviderUrl := networkProviderUrl(network)
+
+	networkProviderUrl := contracts.NetworkProviderUrl(network)
 	log.Info("network provider url", "url", networkProviderUrl)
 	contractAddress := common.HexToAddress(contract)
 
@@ -36,7 +37,7 @@ func NewPortalContract(ctx context.Context, contract, network, chainId string) (
 		return nil, err
 	}
 
-	contractInstance, err := abi.NewBindingsCaller(contractAddress, client)
+	contractInstance, err := fileverseportalabi.NewBindingsCaller(contractAddress, client)
 	if err != nil {
 		// log.Fatalf("Failed to instantiate a smart contract: %v", err)
 		fmt.Printf("Failed to instantiate a smart contract: %v", err)

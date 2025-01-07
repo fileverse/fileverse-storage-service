@@ -1,10 +1,10 @@
-package portal
+package contracts
 
 import (
 	"github.com/spf13/viper"
 )
 
-func networkFromChainId(chainId string) string {
+func NetworkFromChainId(chainId string) string {
 	switch chainId {
 	case "5":
 		return "eth_goerli"
@@ -25,7 +25,7 @@ func networkFromChainId(chainId string) string {
 	}
 }
 
-func networkProviderUrl(network string) string {
+func NetworkProviderUrl(network string) string {
 	switch network {
 	case "eth_goerli":
 		return viper.GetString("rpc_url.eth_goerli")

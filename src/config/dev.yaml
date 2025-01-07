@@ -28,3 +28,4 @@ fileverse_gateway: "https://dev-ipfs.fileverse.io/ipfs/"
 port: 8001
 service:
   did: $SERVICE_DID
+  network: eth_sepolia

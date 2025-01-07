@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"context"
-	goucan "storage/src/pkg/goucan"
+	"storage/src/pkg/goucan"
 	"storage/src/pkg/logger"
-	"storage/src/services/portal"
+	fileverseportal "storage/src/services/contracts/FileversePortal"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -51,46 +51,6 @@ func UcanVerify() gin.HandlerFunc {
 	}
 }
 
-// validateUcanPayload validates a UCAN payload
-func validateUcanPayload(c context.Context, payload *goucan.UcanPayload, token string) (bool, error) {
-	log := logger.GetContextLogger(c)
-	ucan, err := goucan.DecodeUcanString(c, token)
-	if err != nil {
-		log.Debug("Error decoding UCAN", "error", err)
-		return false, err
-	}
-
-	result, err := ucan.Verify(c, payload)
-	if err != nil {
-		log.Debug("Error verifying UCAN", "error", err)
-		return false, err
-	}
-
-	return result, nil
-}
-
-func validateIdentityUcanPayload(c context.Context, contractAddress, invokerAddress, token string) (bool, error) {
-	serviceDID := viper.GetString("service.did")
-	payload := &goucan.UcanPayload{
-		Iss: invokerAddress,
-		Aud: serviceDID,
-		Att: []goucan.Capabilities{
-			{
-				With: map[string]interface{}{
-					"schema":   "storage",
-					"hierPart": strings.ToLower(contractAddress),
-				},
-				Can: map[string]interface{}{
-					"namespace": "file",
-					"segments":  []string{"CREATE"},
-				},
-			},
-		},
-	}
-
-	return validateUcanPayload(c, payload, token)
-}
-
 // validateNamespace validates a namespace
 func validateNamespace(c context.Context, namespace, invokerAddress, token string) (bool, error) {
 	serviceDID := viper.GetString("service.did")
@@ -116,7 +76,7 @@ func validateNamespace(c context.Context, namespace, invokerAddress, token strin
 
 // validateContractAddress validates a contract address
 func validateContractAddress(c context.Context, contractAddress, invokerAddress, token, chainID string) (bool, error) {
-	portal, err := portal.NewPortalContract(c, contractAddress, "", chainID)
+	portal, err := fileverseportal.NewPortalContract(c, contractAddress, "", chainID)
 	if err != nil {
 		return false, err
 	}

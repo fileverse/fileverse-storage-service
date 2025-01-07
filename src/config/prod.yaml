@@ -11,11 +11,11 @@ rpc_url:
 
 mongo:
   uri: $MONGO_URI
-  db: storage
+  db: file-storage
 
 logger:
   format: json
-  level: debug
+  level: info
 
 pinata:
   jwt: $PINATA_JWT
@@ -24,8 +24,8 @@ pinata:
   pin_path: pinning/pinFileToIPFS
 
 x_api_key: "hello_world"
-fileverse_gateway: "https://dev-ipfs.fileverse.io/ipfs/"
+fileverse_gateway: "https://ipfs.fileverse.io/ipfs/"
 port: 8001
 service:
   did: $SERVICE_DID
-  network: eth_sepolia
+  network: gnosis_mainnet
