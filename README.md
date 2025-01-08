@@ -52,8 +52,15 @@ docker compose up --build -d
 
 ## API Endpoints
 
-### File Operations
-- `POST new-storage-service/api/v1/upload/identity` - Upload an identity file
+base url: `<host>/new-storage-service/api/v1`
+
+- **POST** `upload/identity` - Upload an identity file
+  ```sh
+  curl --location '<host>/new-storage-service/api/v1/upload/identity' \
+   --header 'x-api-key: <api-key>' \
+   --header 'Authorization: <ucan-token>' \
+   --form 'file=@"<file-path>"'
+```
 
 
 ## Project Structure
