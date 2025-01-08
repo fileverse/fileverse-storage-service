@@ -60,7 +60,7 @@ base url: `<host>/new-storage-service/api/v1`
    --header 'x-api-key: <api-key>' \
    --header 'Authorization: <ucan-token>' \
    --form 'file=@"<file-path>"'
-```
+   ```
 
 
 ## Project Structure
