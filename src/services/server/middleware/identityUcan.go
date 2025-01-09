@@ -18,6 +18,12 @@ func IdentityUcanVerify() gin.HandlerFunc {
 		log := logger.GetContextLogger(c)
 		contractAddress := c.GetString("contract")
 
+		if contractAddress == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Contract address not found"})
+			c.Abort()
+			return
+		}
+
 		token := c.GetHeader("Authorization")
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Token not found"})
@@ -35,19 +41,25 @@ func IdentityUcanVerify() gin.HandlerFunc {
 			return
 		}
 
+		log.Info("isAuthenticated", "isAuthenticated", isAuthenticated)
+
 		c.Set("isAuthenticated", isAuthenticated)
 		c.Next()
 	}
 }
 
 func validateIdentityUcanPayload(c context.Context, contractAddress, token string) (bool, error) {
+	log := logger.GetContextLogger(c)
+
 	identityModuleContract, err := identitymodule.NewIdentityModuleContract(c, contractAddress)
 	if err != nil {
+		log.Error("Error creating identity module contract", "error", err)
 		return false, err
 	}
 
 	identityDetails, err := identityModuleContract.Instance.GetIdentityModulePublicDetails(&bind.CallOpts{Context: c})
 	if err != nil {
+		log.Error("Error getting identity module public details", "error", err)
 		return false, err
 	}
 
