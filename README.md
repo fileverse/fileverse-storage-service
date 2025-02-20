@@ -1,6 +1,6 @@
 # Fileverse Storage Service
 
-A upload service for fileverse that supports uploading files to ipfs using ipfs pinning service (currently pinata). 
+An upload service for Fileverse that enables file uploads to IPFS using a pinning service (currently Pinata).
 
 ## Prerequisites
 - Go (version 1.21.11 or later)
